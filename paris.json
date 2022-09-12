@@ -1,0 +1,39 @@
+{
+    "data": {
+        "stations": [
+            {
+                "name": "Station A",
+                "posX": "1",
+                "posY": "1"
+            },
+            {
+                "name": "Station B",
+                "posX": "1",
+                "posY": "4"
+            },
+            {
+                "name": "Station C",
+                "posX": "5",
+                "posY": "1"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Line 1",
+                "trains": 2,
+                "stations": [
+                    "Station A",
+                    "Station B"
+                ]
+            },
+            {
+                "name": "Line 2",
+                "trains": 2,
+                "stations": [
+                    "Station B",
+                    "Station C"
+                ]
+            }
+        ]
+    }
+}
