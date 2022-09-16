@@ -1,0 +1,67 @@
+{
+    "data": {
+        "stations": [
+            {
+                "name": "Station A",
+                "posX": 100,
+                "posY": 100
+            },
+            {
+                "name": "Station B",
+                "posX": 100,
+                "posY": 400
+            },
+            {
+                "name": "Station C",
+                "posX": 500,
+                "posY": 100
+            },
+            {
+                "name": "Station D",
+                "posX": 500,
+                "posY": 500
+            }
+        ],
+        "lines": [
+            {
+                "name": "Line 1",
+                "trains": 2,
+                "color": {
+                    "r": 255,
+                    "g": 0,
+                    "b": 0
+                },
+                "stations": [
+                    "Station A",
+                    "Station B"
+                ]
+            },
+            {
+                "name": "Line 2",
+                "trains": 2,
+                "color": {
+                    "r": 0,
+                    "g": 255,
+                    "b": 0
+                },
+                "stations": [
+                    "Station B",
+                    "Station C"
+                ]
+            },
+            {
+                "name": "Line 3",
+                "trains": 2,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 255
+                },
+                "stations": [
+                    "Station C",
+                    "Station D"
+                ]
+            }
+        ]
+    }
+}
