@@ -15,7 +15,7 @@ function drawCircle(posX, posY, color="red") {
   return new Konva.Circle({
     x: posX,
     y: posY,
-    radius: 30,
+    radius: 10,
     fill: color,
     stroke: 'black',
     strokeWidth: 4
@@ -37,7 +37,7 @@ function drawLine(points, color) {
   return new Konva.Line({
     points: points,
     stroke: color,
-    strokeWidth: 15,
+    strokeWidth: 5,
   })
 }
 

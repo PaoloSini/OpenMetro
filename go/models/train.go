@@ -2,6 +2,7 @@ package models
 
 import (
 	"math"
+	"math/rand"
 )
 
 type Train struct {
@@ -11,6 +12,7 @@ type Train struct {
 	PosX           float64
 	PosY           float64
 	Speed          float64
+	Stopped        int
 }
 
 func (t *Train) getNextStation() (*Station, bool) {
@@ -36,6 +38,12 @@ func (t *Train) getNextStation() (*Station, bool) {
 }
 
 func (t *Train) Update() {
+
+	if t.Stopped > 0 {
+		t.Stopped -= 1
+		return
+	}
+
 	nextStation, changeDirection := t.getNextStation()
 	distance := math.Sqrt(
 		math.Pow(t.PosX-nextStation.PosX, 2) + math.Pow(t.PosY-nextStation.PosY, 2),
@@ -43,15 +51,15 @@ func (t *Train) Update() {
 
 	deltaX := t.Speed * math.Sin((nextStation.PosX-t.PosX)/distance)
 	deltaY := t.Speed * math.Sin((nextStation.PosY-t.PosY)/distance)
+	t.PosX += deltaX
+	t.PosY += deltaY
 
 	if distance < 5 {
+		t.Stopped = 50 + rand.Int()%100
 		t.CurrentStation = *nextStation
 		if changeDirection {
 			t.Direction = !t.Direction
 		}
 	}
-
-	t.PosX += deltaX
-	t.PosY += deltaY
 
 }

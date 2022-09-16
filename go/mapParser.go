@@ -45,12 +45,12 @@ func loadMap(path string, metroMap *models.MetroMap) {
 			metroMap.Trains = append(
 				metroMap.Trains,
 				&models.Train{
-					CurrentStation: newLine.Stations[0],
+					CurrentStation: newLine.Stations[trainNb],
 					CurrentLine:    newLine,
 					Direction:      true,
-					PosX:           newLine.Stations[0].PosX,
-					PosY:           newLine.Stations[0].PosY,
-					Speed:          3,
+					PosX:           newLine.Stations[trainNb].PosX,
+					PosY:           newLine.Stations[trainNb].PosY,
+					Speed:          0.5,
 				},
 			)
 		}
