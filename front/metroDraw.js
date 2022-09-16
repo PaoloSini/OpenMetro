@@ -1,4 +1,4 @@
-Konva =require("konva");
+
 
 // first we need to create a stage
 var stage = new Konva.Stage({
