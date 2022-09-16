@@ -13,30 +13,43 @@ type Train struct {
 	Speed          float64
 }
 
-func (t *Train) getNextStation() *Station {
+func (t *Train) getNextStation() (*Station, bool) {
+
+	offset := 1
+	if !t.Direction {
+		offset = -1
+	}
+
 	for index, station := range t.CurrentLine.Stations {
-		if (index == len(t.CurrentLine.Stations)-1) && (t.Direction) {
-			return &t.CurrentLine.Stations[len(t.CurrentLine.Stations)-1]
-		}
-		if (index == 1) && (!t.Direction) {
-			return &t.CurrentLine.Stations[0]
-		}
-		if station == t.CurrentStation {
-			return &t.CurrentLine.Stations[index+1]
+		if station.Name == t.CurrentStation.Name {
+			if (index+1 > len(t.CurrentLine.Stations)-1) && (t.Direction) {
+				return &t.CurrentLine.Stations[index-offset], true
+			}
+			if (index == 0) && (!t.Direction) {
+				return &t.CurrentLine.Stations[index-offset], true
+			}
+			return &t.CurrentLine.Stations[index+offset], false
 		}
 	}
 
-	return nil
+	return nil, false
 }
 
 func (t *Train) Update() {
-	nextStation := t.getNextStation()
+	nextStation, changeDirection := t.getNextStation()
 	distance := math.Sqrt(
 		math.Pow(t.PosX-nextStation.PosX, 2) + math.Pow(t.PosY-nextStation.PosY, 2),
 	)
 
 	deltaX := t.Speed * math.Sin((nextStation.PosX-t.PosX)/distance)
 	deltaY := t.Speed * math.Sin((nextStation.PosY-t.PosY)/distance)
+
+	if distance < 5 {
+		t.CurrentStation = *nextStation
+		if changeDirection {
+			t.Direction = !t.Direction
+		}
+	}
 
 	t.PosX += deltaX
 	t.PosY += deltaY

@@ -18,8 +18,23 @@
             },
             {
                 "name": "Station D",
-                "posX": 570,
-                "posY": 520
+                "posX": 1200,
+                "posY": 850
+            },
+            {
+                "name": "Station E",
+                "posX": 1200,
+                "posY": 220
+            },
+            {
+                "name": "Station F",
+                "posX": 230,
+                "posY": 800
+            },
+            {
+                "name": "Station G",
+                "posX": 880,
+                "posY": 950
             }
         ],
         "lines": [
@@ -29,7 +44,8 @@
                 "color": "#ff0000",
                 "stations": [
                     "Station A",
-                    "Station B"
+                    "Station B",
+                    "Station F"
                 ]
             },
             {
@@ -38,16 +54,19 @@
                 "color": "#00ff00",
                 "stations": [
                     "Station B",
-                    "Station C"
+                    "Station C",
+                    "Station D",
+                    "Station E"
                 ]
             },
             {
                 "name": "Line 3",
                 "trains": 2,
-                "color": "#0000ff",
+                "color": "#ff00ff",
                 "stations": [
-                    "Station C",
-                    "Station D"
+                    "Station D",
+                    "Station G",
+                    "Station F"
                 ]
             }
         ]
