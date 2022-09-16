@@ -18,7 +18,7 @@ func main() {
 
 func initMap() *models.MetroMap {
 	metroMap := new(models.MetroMap)
-	loadMap("paris.json", metroMap)
+	loadMap("mymetro.json", metroMap)
 	return metroMap
 }
 
