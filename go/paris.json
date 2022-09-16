@@ -65,11 +65,16 @@
                 "name": "Station N",
                 "posX": 890,
                 "posY": 80
+            },
+            {
+                "name": "Station O",
+                "posX": 650,
+                "posY": 450
             }
         ],
         "lines": [
             {
-                "name": "Line 1",
+                "name": "Ligne Rouge",
                 "trains": 2,
                 "color": "#ff0000",
                 "stations": [
@@ -80,20 +85,21 @@
                 ]
             },
             {
-                "name": "Line 2",
+                "name": "Ligne Verte",
                 "trains": 2,
-                "color": "#00ff00",
+                "color": "#55cc55",
                 "stations": [
                     "Station B",
                     "Station C",
+                    "Station O",
                     "Station D",
                     "Station E"
                 ]
             },
             {
-                "name": "Line 3",
+                "name": "Ligne Rose",
                 "trains": 2,
-                "color": "#ff00ff",
+                "color": "#ff66ff",
                 "stations": [
                     "Station D",
                     "Station G",
@@ -101,9 +107,9 @@
                 ]
             },
             {
-                "name": "Line 4",
+                "name": "Ligne Orange",
                 "trains": 2,
-                "color": "#ffff00",
+                "color": "#ff9900",
                 "stations": [
                     "Station A",
                     "Station C",
@@ -114,13 +120,14 @@
                 ]
             },
             {
-                "name": "Line 5",
+                "name": "Ligne Bleue",
                 "trains": 2,
-                "color": "#00ffff",
+                "color": "#5599ff",
                 "stations": [
                     "Station L",
                     "Station D",
                     "Station I",
+                    "Station O",
                     "Station J",
                     "Station K"
                 ]
