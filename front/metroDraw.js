@@ -2,29 +2,76 @@
 
 // first we need to create a stage
 var stage = new Konva.Stage({
-  container: 'container',   // id of container <div>
-  width: 500,
-  height: 500
+  container: 'canvas',   // id of container <div>
+  width: 1920,
+  height: 1080
 });
 
 // then create layer
 var layer = new Konva.Layer();
 
-// create our shape
-var circle = new Konva.Circle({
-  x: stage.width() / 2,
-  y: stage.height() / 2,
-  radius: 70,
-  fill: 'red',
-  stroke: 'black',
-  strokeWidth: 4
-});
+function drawCircle(posX, posY, color="red") {
+  // create our shape
+  return new Konva.Circle({
+    x: posX,
+    y: posY,
+    radius: 30,
+    fill: color,
+    stroke: 'black',
+    strokeWidth: 4
+  });
+}
 
-// add the shape to the layer
-layer.add(circle);
+function drawSquare(posX, posY, color='blue') {
+  return new Konva.Rect({
+    x: posX,
+    y: posY,
+    height: 15,
+    width: 15,
+    fill: color,
+  })
+}
+
+function drawLine(points, color) {
+
+  return new Konva.Line({
+    points: points,
+    stroke: color,
+    strokeWidth: 15,
+  })
+}
 
 // add the layer to the stage
 stage.add(layer);
 
-// draw the image
-layer.draw();
+function updateStations(stations) {
+  Object.entries(stations).forEach(entry => {
+    const [stationName, station] = entry;
+    layer.add(drawCircle(station.PosX, station.PosY))
+  });
+}
+
+function updateLines(lines, stations) {
+  Object.entries(lines).forEach(entry => {
+    const [lineName, line] = entry;
+    let linePoints = []
+    line.Stations.forEach( station => {
+      linePoints.push(station.PosX, station.PosY)
+    })
+    layer.add(drawLine(linePoints, line.Color))
+  });
+}
+
+function updateTrains(trains) {
+  trains.forEach(train => {
+    layer.add(drawSquare(train.PosX, train.PosY, 'blue'))
+  })
+}
+
+export function updateMap(metroMap) {
+  layer.destroyChildren()
+  updateStations(metroMap.Stations)
+  updateLines(metroMap.Lines, metroMap.Stations)
+  updateTrains(metroMap.Trains)
+  layer.draw();
+}

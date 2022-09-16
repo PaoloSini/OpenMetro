@@ -3,34 +3,30 @@
         "stations": [
             {
                 "name": "Station A",
-                "posX": 100,
-                "posY": 100
+                "posX": 105,
+                "posY": 120
             },
             {
                 "name": "Station B",
-                "posX": 100,
-                "posY": 400
+                "posX": 115,
+                "posY": 430
             },
             {
                 "name": "Station C",
-                "posX": 500,
-                "posY": 100
+                "posX": 550,
+                "posY": 130
             },
             {
                 "name": "Station D",
-                "posX": 500,
-                "posY": 500
+                "posX": 570,
+                "posY": 520
             }
         ],
         "lines": [
             {
                 "name": "Line 1",
                 "trains": 2,
-                "color": {
-                    "r": 255,
-                    "g": 0,
-                    "b": 0
-                },
+                "color": "#ff0000",
                 "stations": [
                     "Station A",
                     "Station B"
@@ -39,11 +35,7 @@
             {
                 "name": "Line 2",
                 "trains": 2,
-                "color": {
-                    "r": 0,
-                    "g": 255,
-                    "b": 0
-                },
+                "color": "#00ff00",
                 "stations": [
                     "Station B",
                     "Station C"
@@ -52,11 +44,7 @@
             {
                 "name": "Line 3",
                 "trains": 2,
-                "color": {
-                    "r": 0,
-                    "g": 0,
-                    "b": 255
-                },
+                "color": "#0000ff",
                 "stations": [
                     "Station C",
                     "Station D"

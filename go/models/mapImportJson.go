@@ -6,16 +6,12 @@ type MetroMapJson struct {
 			Name     string
 			Trains   int
 			Stations []string
-			Color    struct {
-				R uint8
-				G uint8
-				B uint8
-			}
+			Color    string
 		}
 		Stations []struct {
 			Name string
-			PosX int
-			PosY int
+			PosX float64
+			PosY float64
 		}
 	}
 }

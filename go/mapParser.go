@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"image/color"
 	"os"
 
 	"github.com/PaoloSini/OpenMetro/models"
@@ -38,14 +37,25 @@ func loadMap(path string, metroMap *models.MetroMap) {
 			Name:     line.Name,
 			Stations: lineStations,
 			Trains:   line.Trains,
-			Color: color.RGBA{
-				line.Color.R,
-				line.Color.G,
-				line.Color.B,
-				255,
-			},
+			Color:    line.Color,
+		}
+
+		//Create Trains
+		for trainNb := 0; trainNb < newLine.Trains; trainNb++ {
+			metroMap.Trains = append(
+				metroMap.Trains,
+				&models.Train{
+					CurrentStation: newLine.Stations[0],
+					CurrentLine:    newLine,
+					Direction:      true,
+					PosX:           newLine.Stations[0].PosX,
+					PosY:           newLine.Stations[0].PosY,
+					Speed:          3,
+				},
+			)
 		}
 
 		metroMap.Lines[line.Name] = newLine
 	}
+
 }

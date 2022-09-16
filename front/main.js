@@ -1,23 +1,20 @@
-metroDraw = require("./metroDraw")
+import * as metroDraw from "./metroDraw.js"
+import * as mapParser from "./mapParser.js"
 
 let socket = new WebSocket("ws://127.0.0.1:8080/ws");
-console.log("Attempting Connection...");
 
 socket.onopen = () => {
-    console.log("Successfully Connected");
     socket.send("Hi From the Client!")
 };
 
 socket.onclose = event => {
-    console.log("Socket Closed Connection: ", event);
     socket.send("Client Closed!")
 };
 
 socket.onmessage = (ev) => {
-  // canvas.innerText = ev.data
-  drawRect()
+  let metroMap = mapParser.parseMap(ev.data)
+  metroDraw.updateMap(metroMap)
 }
 
 socket.onerror = error => {
-    console.log("Socket Error: ", error);
 };

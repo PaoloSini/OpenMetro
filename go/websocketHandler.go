@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/PaoloSini/OpenMetro/models"
 	"github.com/gorilla/websocket"
@@ -22,7 +23,12 @@ func viewMap(mm *models.MetroMap) http.HandlerFunc {
 		}
 		log.Println("Client Connected")
 
-		err = ws.WriteMessage(websocket.TextMessage, mm.ToJSON())
+		for i := 0; i < 50000000000; i++ {
+			mm.Update()
+			err = ws.WriteMessage(websocket.TextMessage, mm.ToJSON())
+			time.Sleep(100000000)
+		}
+
 		if err != nil {
 			log.Println(err)
 		}

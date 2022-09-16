@@ -2,6 +2,6 @@ package models
 
 type Station struct {
 	Name string
-	PosX int
-	PosY int
+	PosX float64
+	PosY float64
 }

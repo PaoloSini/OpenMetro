@@ -12,14 +12,14 @@ const WIN_HEIGHT = 1000
 
 func main() {
 	MetroMap := initMap()
-	SetupRoutes(&MetroMap)
+	SetupRoutes(MetroMap)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func initMap() models.MetroMap {
+func initMap() *models.MetroMap {
 	metroMap := new(models.MetroMap)
 	loadMap("paris.json", metroMap)
-	return *metroMap
+	return metroMap
 }
 
 func check(e error) {
