@@ -22,12 +22,12 @@ function drawCircle(posX, posY, color="red") {
   });
 }
 
-function drawSquare(posX, posY, color='blue') {
+function drawSquare(posX, posY, color='blue', side=15) {
   return new Konva.Rect({
     x: posX,
     y: posY,
-    height: 15,
-    width: 15,
+    height: side,
+    width: side,
     fill: color,
   })
 }
@@ -68,10 +68,22 @@ function updateTrains(trains) {
   })
 }
 
+function updateTravelers(travelers) {
+  travelers.forEach( traveler => {
+    layer.add(
+      drawSquare(
+        traveler.PosX, traveler.PosY,
+        'black', 3
+      )
+    )
+  })
+}
+
 export function updateMap(metroMap) {
   layer.destroyChildren()
   updateStations(metroMap.Stations)
   updateLines(metroMap.Lines, metroMap.Stations)
   updateTrains(metroMap.Trains)
+  updateTravelers(metroMap.Travelers)
   layer.draw();
 }

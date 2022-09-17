@@ -26,7 +26,7 @@ func viewMap(mm *models.MetroMap) http.HandlerFunc {
 		for i := 0; i < 50000000000; i++ {
 			mm.Update()
 			err = ws.WriteMessage(websocket.TextMessage, mm.ToJSON())
-			time.Sleep(10000000)
+			time.Sleep(20000000)
 		}
 
 		if err != nil {

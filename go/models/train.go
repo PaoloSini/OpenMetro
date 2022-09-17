@@ -13,6 +13,35 @@ type Train struct {
 	PosY           float64
 	Speed          float64
 	Stopped        int
+	travelers      []*Traveler
+}
+
+func (t *Train) GenerateTravelers(travelersNb int) {
+
+	for i := 0; i < travelersNb; i++ {
+		t.travelers = append(
+			t.travelers,
+			&Traveler{
+				t.PosX,
+				t.PosY,
+				true,
+			},
+		)
+	}
+}
+
+func (t *Train) DropTravelers(travelersNb int) []*Traveler {
+
+	droppedTravelers := make([]*Traveler, 0)
+
+	for i := 0; i < travelersNb; i++ {
+		droppedTraveler := t.travelers[0]
+		t.travelers = t.travelers[1:]
+		droppedTraveler.PosX, droppedTraveler.PosY = t.PosX+2, t.PosY+2
+		droppedTravelers = append(droppedTravelers, droppedTraveler)
+	}
+
+	return droppedTravelers
 }
 
 func (t *Train) getNextStation() (*Station, bool) {
@@ -37,12 +66,9 @@ func (t *Train) getNextStation() (*Station, bool) {
 	return nil, false
 }
 
-func (t *Train) Update() {
+func (t *Train) Update() []*Traveler {
 
-	if t.Stopped > 0 {
-		t.Stopped -= 1
-		return
-	}
+	droppedTravelers := t.handleDropTravelers()
 
 	nextStation, changeDirection := t.getNextStation()
 	distance := math.Sqrt(
@@ -55,11 +81,38 @@ func (t *Train) Update() {
 	t.PosY += deltaY
 
 	if distance < 5 {
-		t.Stopped = 50 + rand.Int()%100
-		t.CurrentStation = *nextStation
-		if changeDirection {
-			t.Direction = !t.Direction
+		t.handleStop(nextStation, changeDirection)
+	}
+
+	return droppedTravelers
+
+}
+
+func (t *Train) handleDropTravelers() []*Traveler {
+
+	droppedTravelers := make([]*Traveler, 0)
+
+	if t.Stopped > 0 {
+		t.Stopped -= 1
+		if len(t.travelers) > 0 {
+			if rand.Intn(1000) >= 990 {
+				droppedTravelers = append(
+					droppedTravelers,
+					t.DropTravelers(1)...,
+				)
+			}
+
 		}
 	}
 
+	return droppedTravelers
+}
+
+func (t *Train) handleStop(nextStation *Station, changeDirection bool) {
+
+	t.Stopped = 50 + rand.Intn(100)
+	t.CurrentStation = *nextStation
+	if changeDirection {
+		t.Direction = !t.Direction
+	}
 }
