@@ -87,7 +87,7 @@
             },
             {
                 "name": "Ligne Verte",
-                "trains": 2,
+                "trains": 3,
                 "color": "#55cc55",
                 "stations": [
                     "Station B",
@@ -109,7 +109,7 @@
             },
             {
                 "name": "Ligne Orange",
-                "trains": 2,
+                "trains": 3,
                 "color": "#ff9900",
                 "stations": [
                     "Station A",
@@ -122,7 +122,7 @@
             },
             {
                 "name": "Ligne Bleue",
-                "trains": 2,
+                "trains": 5,
                 "color": "#5599ff",
                 "stations": [
                     "Station L",

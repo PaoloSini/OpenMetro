@@ -16,6 +16,10 @@ type Train struct {
 	travelers      []*Traveler
 }
 
+func (t *Train) GetPos() (float64, float64) {
+	return t.PosX, t.PosY
+}
+
 func (t *Train) GenerateTravelers(travelersNb int) {
 
 	for i := 0; i < travelersNb; i++ {
@@ -25,6 +29,7 @@ func (t *Train) GenerateTravelers(travelersNb int) {
 				t.PosX,
 				t.PosY,
 				true,
+				0,
 			},
 		)
 	}
@@ -38,10 +43,26 @@ func (t *Train) DropTravelers(travelersNb int) []*Traveler {
 		droppedTraveler := t.travelers[0]
 		t.travelers = t.travelers[1:]
 		droppedTraveler.PosX, droppedTraveler.PosY = t.PosX+2, t.PosY+2
+		droppedTraveler.Waiting = 100
 		droppedTravelers = append(droppedTravelers, droppedTraveler)
 	}
 
 	return droppedTravelers
+}
+
+func (t *Train) PickupTravelers(travelers []*Traveler) []*Traveler {
+
+	pickedUpTravelers := make([]*Traveler, 0)
+
+	for _, traveler := range travelers {
+		if traveler.Waiting == 0 {
+			t.travelers = append(t.travelers, traveler)
+			pickedUpTravelers = append(pickedUpTravelers, traveler)
+		}
+	}
+
+	return pickedUpTravelers
+
 }
 
 func (t *Train) getNextStation() (*Station, bool) {
@@ -68,12 +89,14 @@ func (t *Train) getNextStation() (*Station, bool) {
 
 func (t *Train) Update() []*Traveler {
 
-	droppedTravelers := t.handleDropTravelers()
+	if t.Stopped > 0 {
+		droppedTravelers := t.handleDropTravelers()
+		t.Stopped -= 1
+		return droppedTravelers
+	}
 
 	nextStation, changeDirection := t.getNextStation()
-	distance := math.Sqrt(
-		math.Pow(t.PosX-nextStation.PosX, 2) + math.Pow(t.PosY-nextStation.PosY, 2),
-	)
+	distance := GetDistance(t, nextStation)
 
 	deltaX := t.Speed * math.Sin((nextStation.PosX-t.PosX)/distance)
 	deltaY := t.Speed * math.Sin((nextStation.PosY-t.PosY)/distance)
@@ -84,7 +107,7 @@ func (t *Train) Update() []*Traveler {
 		t.handleStop(nextStation, changeDirection)
 	}
 
-	return droppedTravelers
+	return nil
 
 }
 
@@ -92,17 +115,14 @@ func (t *Train) handleDropTravelers() []*Traveler {
 
 	droppedTravelers := make([]*Traveler, 0)
 
-	if t.Stopped > 0 {
-		t.Stopped -= 1
-		if len(t.travelers) > 0 {
-			if rand.Intn(1000) >= 990 {
-				droppedTravelers = append(
-					droppedTravelers,
-					t.DropTravelers(1)...,
-				)
-			}
-
+	if len(t.travelers) > 0 {
+		if rand.Intn(1000) >= 900 {
+			droppedTravelers = append(
+				droppedTravelers,
+				t.DropTravelers(1)...,
+			)
 		}
+
 	}
 
 	return droppedTravelers
