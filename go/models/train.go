@@ -3,6 +3,9 @@ package models
 import (
 	"math"
 	"math/rand"
+	"sync"
+
+	"github.com/google/uuid"
 )
 
 type Train struct {
@@ -13,7 +16,22 @@ type Train struct {
 	PosY           float64
 	Speed          float64
 	Stopped        int
-	travelers      []*Traveler
+	Travelers      map[uuid.UUID]*Traveler
+	travelerLock   *sync.RWMutex
+}
+
+func (t *Train) Init(line Line, trainNb int) {
+
+	t.CurrentStation = line.Stations[trainNb]
+	t.CurrentLine = line
+	t.PosX = line.Stations[trainNb].PosX
+	t.PosY = line.Stations[trainNb].PosY
+	t.Direction = true
+	t.Speed = 0.5
+	t.Travelers = make(map[uuid.UUID]*Traveler, 0)
+	t.travelerLock = &sync.RWMutex{}
+	t.GenerateTravelers(40)
+
 }
 
 func (t *Train) GetPos() (float64, float64) {
@@ -23,15 +41,11 @@ func (t *Train) GetPos() (float64, float64) {
 func (t *Train) GenerateTravelers(travelersNb int) {
 
 	for i := 0; i < travelersNb; i++ {
-		t.travelers = append(
-			t.travelers,
-			&Traveler{
-				t.PosX,
-				t.PosY,
-				true,
-				0,
-			},
-		)
+		newTraveler := new(Traveler)
+		newTraveler.Init(t.PosX, t.PosY)
+		t.travelerLock.Lock()
+		t.Travelers[newTraveler.Id] = newTraveler
+		t.travelerLock.Unlock()
 	}
 }
 
@@ -39,14 +53,21 @@ func (t *Train) DropTravelers(travelersNb int) []*Traveler {
 
 	droppedTravelers := make([]*Traveler, 0)
 
-	for i := 0; i < travelersNb; i++ {
-		droppedTraveler := t.travelers[0]
-		t.travelers = t.travelers[1:]
+	t.travelerLock.RLock()
+	for k, v := range t.Travelers {
+		if travelersNb == 0 {
+			break
+		}
+		droppedTraveler := v
+		// t.travelerLock.Lock()
+		delete(t.Travelers, k)
+		// t.travelerLock.Unlock()
 		droppedTraveler.PosX, droppedTraveler.PosY = t.PosX+2, t.PosY+2
 		droppedTraveler.Waiting = 100
 		droppedTravelers = append(droppedTravelers, droppedTraveler)
+		travelersNb -= 1
 	}
-
+	t.travelerLock.RUnlock()
 	return droppedTravelers
 }
 
@@ -56,7 +77,9 @@ func (t *Train) PickupTravelers(travelers []*Traveler) []*Traveler {
 
 	for _, traveler := range travelers {
 		if traveler.Waiting == 0 {
-			t.travelers = append(t.travelers, traveler)
+			t.travelerLock.Lock()
+			t.Travelers[traveler.Id] = traveler
+			t.travelerLock.Unlock()
 			pickedUpTravelers = append(pickedUpTravelers, traveler)
 		}
 	}
@@ -115,15 +138,16 @@ func (t *Train) handleDropTravelers() []*Traveler {
 
 	droppedTravelers := make([]*Traveler, 0)
 
-	if len(t.travelers) > 0 {
+	t.travelerLock.RLock()
+	if len(t.Travelers) > 0 {
 		if rand.Intn(1000) >= 900 {
 			droppedTravelers = append(
 				droppedTravelers,
 				t.DropTravelers(1)...,
 			)
 		}
-
 	}
+	t.travelerLock.RUnlock()
 
 	return droppedTravelers
 }

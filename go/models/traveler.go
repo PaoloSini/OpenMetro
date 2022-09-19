@@ -1,12 +1,26 @@
 package models
 
-import "math/rand"
+import (
+	"math/rand"
+
+	"github.com/google/uuid"
+)
 
 type Traveler struct {
 	PosX    float64
 	PosY    float64
 	InTrain bool
 	Waiting float64
+	Id      uuid.UUID
+}
+
+func (t *Traveler) Init(PosX float64, PosY float64) {
+	t.PosX = PosX
+	t.PosY = PosY
+	t.InTrain = true
+	t.Waiting = 0
+	t.Id = uuid.New()
+
 }
 
 func (t *Traveler) GetPos() (float64, float64) {

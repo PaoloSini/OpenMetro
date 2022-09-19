@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/fogleman/gg v1.3.0
+	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/hajimehoshi/ebiten/v2 v2.4.2
 )

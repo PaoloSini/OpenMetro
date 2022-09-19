@@ -43,16 +43,8 @@ func loadMap(path string, metroMap *models.MetroMap) {
 		//Create Trains
 		for trainNb := 0; trainNb < newLine.Trains; trainNb++ {
 
-			newTrain := &models.Train{
-				CurrentStation: newLine.Stations[trainNb],
-				CurrentLine:    newLine,
-				Direction:      true,
-				PosX:           newLine.Stations[trainNb].PosX,
-				PosY:           newLine.Stations[trainNb].PosY,
-				Speed:          0.5,
-			}
-
-			newTrain.GenerateTravelers(40)
+			newTrain := new(models.Train)
+			newTrain.Init(newLine, trainNb)
 
 			metroMap.Trains = append(
 				metroMap.Trains,

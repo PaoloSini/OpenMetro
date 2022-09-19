@@ -24,11 +24,11 @@ func viewMap(mm *models.MetroMap) http.HandlerFunc {
 		log.Println("Client Connected")
 
 		for i := 0; i < 50000000000; i++ {
-			for j := 0; j < 200; j++ {
+			for j := 0; j < 5; j++ {
 				mm.Update()
 			}
 			err = ws.WriteMessage(websocket.TextMessage, mm.ToJSON())
-			time.Sleep(20000000)
+			time.Sleep(50000000)
 		}
 
 		if err != nil {

@@ -1,23 +1,43 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+	"sync"
+
+	"github.com/google/uuid"
+)
 
 type MetroMap struct {
-	Stations  map[string]Station
-	Lines     map[string]Line
-	Trains    []*Train
-	Travelers []*Traveler
+	Stations     map[string]Station
+	Lines        map[string]Line
+	Trains       []*Train
+	Travelers    map[uuid.UUID]*Traveler
+	travelerLock *sync.RWMutex
+}
+
+func (mm *MetroMap) Init() {
+	mm.travelerLock = &sync.RWMutex{}
+	mm.Travelers = make(map[uuid.UUID]*Traveler, 0)
 }
 
 func (mm *MetroMap) ToJSON() []byte {
-	jsonString, _ := json.Marshal(mm)
+	jsonString, err := json.Marshal(mm)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 	return jsonString
 }
 
 func (mm *MetroMap) Update() {
 	for _, train := range mm.Trains {
 		droppedTravelers := train.Update()
-		mm.Travelers = append(mm.Travelers, droppedTravelers...)
+		for _, droppedTraveler := range droppedTravelers {
+			mm.travelerLock.Lock()
+			mm.Travelers[droppedTraveler.Id] = droppedTraveler
+			mm.travelerLock.Unlock()
+		}
 		if train.Stopped > 0 {
 			closeTravelers := mm.getCloseTravelers(train.CurrentStation)
 			if len(closeTravelers) > 0 {
@@ -26,51 +46,37 @@ func (mm *MetroMap) Update() {
 			}
 		}
 	}
-
+	mm.travelerLock.RLock()
 	for _, traveler := range mm.Travelers {
 		traveler.Wander()
 	}
+	mm.travelerLock.RUnlock()
 }
 
 func (mm *MetroMap) getCloseTravelers(station Station) []*Traveler {
 
 	closeTravelers := make([]*Traveler, 0)
 
-	for travelerIndex, traveler := range mm.Travelers {
+	mm.travelerLock.RLock()
+	for _, traveler := range mm.Travelers {
 		if GetDistance(traveler, &station) < 50 {
 			closeTravelers = append(
 				closeTravelers,
-				mm.Travelers[travelerIndex],
+				traveler,
 			)
 		}
 	}
+	mm.travelerLock.RUnlock()
 
 	return closeTravelers
 }
 
 func (mm *MetroMap) removeTravelers(travelers []*Traveler) {
 
-	removedTravelerIndices := make([]int, 0)
-
-	for travelerIndex, traveler := range mm.Travelers {
-		for _, removedTraveler := range travelers {
-			if traveler == removedTraveler {
-				removedTravelerIndices = append(
-					removedTravelerIndices,
-					travelerIndex,
-				)
-			}
-		}
-	}
-
-	if len(removedTravelerIndices) == 0 {
-		return
-	}
-
-	for i := len(removedTravelerIndices) - 1; i >= 0; i-- {
-		lastTraveler := mm.Travelers[len(mm.Travelers)-1]
-		mm.Travelers[removedTravelerIndices[i]] = lastTraveler
-		mm.Travelers = mm.Travelers[:len(mm.Travelers)-1]
+	for _, removedTraveler := range travelers {
+		mm.travelerLock.Lock()
+		delete(mm.Travelers, removedTraveler.Id)
+		mm.travelerLock.Unlock()
 	}
 
 }

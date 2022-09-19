@@ -69,7 +69,8 @@ function updateTrains(trains) {
 }
 
 function updateTravelers(travelers) {
-  travelers.forEach( traveler => {
+  Object.entries(travelers).forEach( entry => {
+    const [travelerID, traveler] = entry;
     layer.add(
       drawSquare(
         traveler.PosX, traveler.PosY,
