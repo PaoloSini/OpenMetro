@@ -22,7 +22,7 @@ function drawCircle(posX, posY, color="red") {
   });
 }
 
-function drawSquare(posX, posY, color='blue', side=15) {
+function drawSquare(posX, posY, color='blue', side=16) {
   return new Konva.Rect({
     x: posX,
     y: posY,

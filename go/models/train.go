@@ -24,8 +24,8 @@ func (t *Train) Init(line Line, trainNb int) {
 
 	t.CurrentStation = line.Stations[trainNb]
 	t.CurrentLine = line
-	t.PosX = line.Stations[trainNb].PosX
-	t.PosY = line.Stations[trainNb].PosY
+	t.PosX = line.Stations[trainNb].PosX - 8
+	t.PosY = line.Stations[trainNb].PosY - 8
 	t.Direction = true
 	t.Speed = 0.5
 	t.Travelers = make(map[uuid.UUID]*Traveler, 0)
@@ -59,9 +59,7 @@ func (t *Train) DropTravelers(travelersNb int) []*Traveler {
 			break
 		}
 		droppedTraveler := v
-		// t.travelerLock.Lock()
 		delete(t.Travelers, k)
-		// t.travelerLock.Unlock()
 		droppedTraveler.PosX, droppedTraveler.PosY = t.PosX+2, t.PosY+2
 		droppedTraveler.Waiting = 100
 		droppedTravelers = append(droppedTravelers, droppedTraveler)
