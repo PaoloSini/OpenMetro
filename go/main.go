@@ -20,6 +20,9 @@ func initMap() *models.MetroMap {
 	metroMap := new(models.MetroMap)
 	metroMap.Init()
 	loadMap("mymetro.json", metroMap)
+	metroMap.Travelers = GenerateTravelers(500)
+	metroMap.DispatchTravelers()
+
 	return metroMap
 }
 

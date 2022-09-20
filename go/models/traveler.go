@@ -7,11 +7,12 @@ import (
 )
 
 type Traveler struct {
-	PosX    float64
-	PosY    float64
-	InTrain bool
-	Waiting float64
-	Id      uuid.UUID
+	PosX        float64
+	PosY        float64
+	InTrain     bool
+	Waiting     float64
+	Id          uuid.UUID
+	Destination Station
 }
 
 func (t *Traveler) Init(PosX float64, PosY float64) {

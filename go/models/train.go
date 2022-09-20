@@ -38,17 +38,6 @@ func (t *Train) GetPos() (float64, float64) {
 	return t.PosX, t.PosY
 }
 
-func (t *Train) GenerateTravelers(travelersNb int) {
-
-	for i := 0; i < travelersNb; i++ {
-		newTraveler := new(Traveler)
-		newTraveler.Init(t.PosX, t.PosY)
-		t.travelerLock.Lock()
-		t.Travelers[newTraveler.Id] = newTraveler
-		t.travelerLock.Unlock()
-	}
-}
-
 func (t *Train) DropTravelers(travelersNb int) []*Traveler {
 
 	droppedTravelers := make([]*Traveler, 0)

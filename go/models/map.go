@@ -20,7 +20,7 @@ type MetroMap struct {
 
 func (mm *MetroMap) Init() {
 	mm.travelerLock = &sync.RWMutex{}
-	mm.Travelers = make(map[uuid.UUID]*Traveler, 0)
+	mm.Travelers = make(map[uuid.UUID]*Traveler)
 }
 
 func (mm *MetroMap) ToJSON() []byte {
@@ -30,6 +30,14 @@ func (mm *MetroMap) ToJSON() []byte {
 		fmt.Println(err)
 	}
 	return jsonString
+}
+
+func (mm *MetroMap) DispatchTravelers() {
+	travelersPerTrain := len(mm.Travelers)/len(mm.Trains)
+	for trainIndex, train := range mm.Trains {
+		train.PickupTravelers(mm.Travelers[:travelersPerTrain])
+		mm.Travelers = mm.Travelers[travelersPerTrain:]
+	}
 }
 
 func (mm *MetroMap) Update() {
