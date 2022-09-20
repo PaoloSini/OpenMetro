@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"golang.org/x/exp/maps"
 )
 
 type Train struct {
@@ -23,10 +22,10 @@ type Train struct {
 
 func (t *Train) Init(line Line, trainNb int) {
 
-	t.CurrentStation = *maps.Values(line.Stations)[trainNb]
+	t.CurrentStation = *line.StationOrder[trainNb]
 	t.CurrentLine = line
-	t.PosX = maps.Values(line.Stations)[trainNb].PosX - 8
-	t.PosY = maps.Values(line.Stations)[trainNb].PosY - 8
+	t.PosX = line.StationOrder[trainNb].PosX - 8
+	t.PosY = line.StationOrder[trainNb].PosY - 8
 	t.Direction = true
 	t.Speed = 0.5
 	t.Travelers = make(map[uuid.UUID]*Traveler, 0)
@@ -94,15 +93,15 @@ func (t *Train) getNextStation() (*Station, bool) {
 		offset = -1
 	}
 
-	for index, station := range maps.Values(t.CurrentLine.Stations) {
+	for index, station := range t.CurrentLine.StationOrder {
 		if station.Name == t.CurrentStation.Name {
 			if (index+1 > len(t.CurrentLine.Stations)-1) && (t.Direction) {
-				return maps.Values(t.CurrentLine.Stations)[index-offset], true
+				return t.CurrentLine.StationOrder[index-offset], true
 			}
 			if (index == 0) && (!t.Direction) {
-				return maps.Values(t.CurrentLine.Stations)[index-offset], true
+				return t.CurrentLine.StationOrder[index-offset], true
 			}
-			return maps.Values(t.CurrentLine.Stations)[index+offset], false
+			return t.CurrentLine.StationOrder[index+offset], false
 		}
 	}
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/dominikbraun/graph"
 	"github.com/google/uuid"
 )
 
@@ -13,6 +14,7 @@ type MetroMap struct {
 	Lines        map[uuid.UUID]*Line
 	Trains       []*Train
 	Travelers    map[uuid.UUID]*Traveler
+	Graph        graph.Graph[string, Station]
 	travelerLock *sync.RWMutex
 }
 

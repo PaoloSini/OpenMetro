@@ -55,7 +55,7 @@ function updateLines(lines, stations) {
   Object.entries(lines).forEach(entry => {
     const [lineName, line] = entry;
     let linePoints = []
-    line.Stations.forEach( station => {
+    line.StationOrder.forEach( station => {
       linePoints.push(station.PosX, station.PosY)
     })
     layer.add(drawLine(linePoints, line.Color))

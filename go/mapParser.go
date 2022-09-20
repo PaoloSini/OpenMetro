@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/PaoloSini/OpenMetro/models"
@@ -68,17 +67,12 @@ func loadMap(path string, metroMap *models.MetroMap) {
 
 		metroMap.Lines[newLine.Id] = newLine
 
-		for _, line := range metroMap.Lines {
-			for stationUUID, station := range line.Stations {
-				fmt.Println(stationUUID.String())
-				fmt.Println(station.Name)
-			}
-		}
 	}
 
 	metroMapGraph := graphFromMap(*metroMap)
 	file, _ := os.Create("./mygraph.gv")
 	_ = draw.DOT(metroMapGraph, file)
+	metroMap.Graph = metroMapGraph
 }
 
 func graphFromMap(mm models.MetroMap) graph.Graph[string, models.Station] {
