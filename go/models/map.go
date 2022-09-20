@@ -9,8 +9,8 @@ import (
 )
 
 type MetroMap struct {
-	Stations     map[uuid.UUID]Station
-	Lines        map[uuid.UUID]Line
+	Stations     map[uuid.UUID]*Station
+	Lines        map[uuid.UUID]*Line
 	Trains       []*Train
 	Travelers    map[uuid.UUID]*Traveler
 	travelerLock *sync.RWMutex
