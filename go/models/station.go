@@ -11,7 +11,11 @@ type Station struct {
 	Id   uuid.UUID
 }
 
-func (s Station) Int() int {
+func (s *Station) String() string {
+	return s.Name
+}
+
+func (s *Station) Int() int {
 	return s.Id.ClockSequence()
 }
 

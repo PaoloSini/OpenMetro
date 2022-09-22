@@ -62,7 +62,7 @@ func (t *Train) PickupTravelers(travelers []*Traveler) []*Traveler {
 	pickedUpTravelers := make([]*Traveler, 0)
 
 	for _, traveler := range travelers {
-		if traveler.Waiting == 0 {
+		if traveler.Waiting == 0 && traveler.wantToBoard(t) {
 			t.travelerLock.Lock()
 			t.Travelers[traveler.Id] = traveler
 			traveler.InTrain = true

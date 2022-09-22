@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/exp/maps"
 	"sync"
 
 	"github.com/dominikbraun/graph"
@@ -42,7 +43,6 @@ func (mm *MetroMap) DispatchTravelers() {
 			}
 			delete(mm.Travelers, travelerUUID)
 			travelersToPickUp = append(travelersToPickUp, traveler)
-			travelersPerTrain -= 1
 		}
 		train.PickupTravelers(travelersToPickUp)
 	}
@@ -97,4 +97,25 @@ func (mm *MetroMap) removeTravelers(travelers []*Traveler) {
 		mm.travelerLock.Unlock()
 	}
 
+}
+
+func (mm *MetroMap) GenerateTravelers(travelersNb int) map[uuid.UUID]*Traveler {
+
+	newTravelers := make(map[uuid.UUID]*Traveler, 0)
+
+	desiredStation := maps.Values(mm.Stations)[0]
+	fmt.Println(desiredStation.Name)
+
+	for i := 0; i < travelersNb; i++ {
+		newTraveler := new(Traveler)
+		newTraveler.Init(
+			0,
+			0,
+			*desiredStation,
+			&mm.Graph,
+		)
+		newTravelers[newTraveler.Id] = newTraveler
+	}
+
+	return newTravelers
 }

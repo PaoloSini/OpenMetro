@@ -7,7 +7,7 @@ type Positionnable interface {
 }
 
 func GetDistance(p1 Positionnable, p2 Positionnable) float64 {
-
+	
 	p1PosX, p1PosY := p1.GetPos()
 	p2PosX, p2PosY := p2.GetPos()
 
