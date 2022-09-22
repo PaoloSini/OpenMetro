@@ -33,10 +33,18 @@ func (mm *MetroMap) ToJSON() []byte {
 }
 
 func (mm *MetroMap) DispatchTravelers() {
-	travelersPerTrain := len(mm.Travelers)/len(mm.Trains)
-	for trainIndex, train := range mm.Trains {
-		train.PickupTravelers(mm.Travelers[:travelersPerTrain])
-		mm.Travelers = mm.Travelers[travelersPerTrain:]
+	travelersPerTrain := len(mm.Travelers) / len(mm.Trains)
+	for _, train := range mm.Trains {
+		travelersToPickUp := make([]*Traveler, 0)
+		for travelerUUID, traveler := range mm.Travelers {
+			if len(travelersToPickUp) == travelersPerTrain {
+				break
+			}
+			delete(mm.Travelers, travelerUUID)
+			travelersToPickUp = append(travelersToPickUp, traveler)
+			travelersPerTrain -= 1
+		}
+		train.PickupTravelers(travelersToPickUp)
 	}
 }
 

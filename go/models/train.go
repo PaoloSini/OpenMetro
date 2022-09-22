@@ -30,7 +30,6 @@ func (t *Train) Init(line Line, trainNb int) {
 	t.Speed = 0.5
 	t.Travelers = make(map[uuid.UUID]*Traveler, 0)
 	t.travelerLock = &sync.RWMutex{}
-	t.GenerateTravelers(40)
 
 }
 
@@ -66,6 +65,7 @@ func (t *Train) PickupTravelers(travelers []*Traveler) []*Traveler {
 		if traveler.Waiting == 0 {
 			t.travelerLock.Lock()
 			t.Travelers[traveler.Id] = traveler
+			traveler.InTrain = true
 			t.travelerLock.Unlock()
 			pickedUpTravelers = append(pickedUpTravelers, traveler)
 		}
