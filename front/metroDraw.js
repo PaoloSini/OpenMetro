@@ -74,7 +74,7 @@ function updateTravelers(travelers) {
     layer.add(
       drawSquare(
         traveler.PosX, traveler.PosY,
-        'black', 3
+          traveler.Arrived > 0 ? 'pink' : 'black', traveler.Arrived > 0 ? 20 : 3
       )
     )
   })

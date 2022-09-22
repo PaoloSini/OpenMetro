@@ -12,6 +12,7 @@ type Traveler struct {
 	PosY        float64
 	InTrain     bool
 	Waiting     float64
+	Arrived     int
 	Id          uuid.UUID
 	Destination Station
 	MetroGraph  *graph.Graph[string, Station]
@@ -30,6 +31,7 @@ func (t *Traveler) Init(
 	t.Id = uuid.New()
 	t.Destination = DesiredDest
 	t.MetroGraph = MetroGraph
+	t.Arrived = -1
 
 }
 

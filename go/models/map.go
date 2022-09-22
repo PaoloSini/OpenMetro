@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"golang.org/x/exp/maps"
+	"math/rand"
 	"sync"
 
 	"github.com/dominikbraun/graph"
@@ -65,7 +66,13 @@ func (mm *MetroMap) Update() {
 		}
 	}
 	mm.travelerLock.RLock()
-	for _, traveler := range mm.Travelers {
+	for travelerUUID, traveler := range mm.Travelers {
+		if traveler.Arrived > 0 {
+			traveler.Arrived -= 1
+		}
+		if traveler.Arrived == 0 {
+			delete(mm.Travelers, travelerUUID)
+		}
 		traveler.Wander()
 	}
 	mm.travelerLock.RUnlock()
@@ -103,10 +110,8 @@ func (mm *MetroMap) GenerateTravelers(travelersNb int) map[uuid.UUID]*Traveler {
 
 	newTravelers := make(map[uuid.UUID]*Traveler, 0)
 
-	desiredStation := maps.Values(mm.Stations)[0]
-	fmt.Println(desiredStation.Name)
-
 	for i := 0; i < travelersNb; i++ {
+		desiredStation := maps.Values(mm.Stations)[rand.Intn(len(mm.Stations))]
 		newTraveler := new(Traveler)
 		newTraveler.Init(
 			0,

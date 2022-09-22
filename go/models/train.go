@@ -53,6 +53,13 @@ func (t *Train) DropTravelers(travelersNb int) []*Traveler {
 		droppedTravelers = append(droppedTravelers, droppedTraveler)
 		travelersNb -= 1
 	}
+
+	for _, droppedTraveler := range droppedTravelers {
+		if droppedTraveler.Destination.Id == t.CurrentStation.Id {
+			droppedTraveler.Arrived = 1000
+		}
+	}
+
 	t.travelerLock.RUnlock()
 	return droppedTravelers
 }
